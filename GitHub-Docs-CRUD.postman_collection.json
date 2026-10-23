@@ -1,0 +1,285 @@
+{
+  "info": {
+    "_postman_id": "28078049-9848-48e4-bf81-705cb1c918b5",
+    "name": "GitHub-Docs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58056542",
+    "_collection_link": "https://go.postman.co/collection/58056542-28078049-9848-48e4-bf81-705cb1c918b5?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "listing",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"200 OK\", () => pm.response.to.have.status(200));\r\npm.test(\"Is array and contains repo\", () => {\r\n  const b = pm.response.json();\r\n  pm.expect(b).to.be.an(\"array\");\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/vnd.github+json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "X-GitHub-Api-Version",
+            "value": "2026-03-10"
+          }
+        ],
+        "url": {
+          "raw": "{{url}}/users/{{user}}/repos",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "users",
+            "{{user}}",
+            "repos"
+          ]
+        },
+        "description": "Generated from cURL: curl -L \\\n  -H \"Accept: application/vnd.github+json\" \\\n  -H \"Authorization: Bearer {{token}}\" \\\n  -H \"X-GitHub-Api-Version: 2026-03-10\" \\\n  {{url}}/users/LikhithPanda/repos"
+      },
+      "response": []
+    },
+    {
+      "name": "creating",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"201 Created\", () => pm.response.to.have.status(201));\r\npm.test(\"Name matches\", () => {\r\n  const b = pm.response.json();\r\n  pm.expect(b.name).to.eql(\"Hello-World\");\r\n  pm.expect(b.owner.login).to.eql(pm.environment.get(\"user\"));\r\n});\r\npm.test(\"Response time < 10000ms\", () => pm.expect(pm.response.responseTime).to.be.below(10000));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/vnd.github+json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "X-GitHub-Api-Version",
+            "value": "2026-03-10"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Hello-World\",\"description\":\"This is your first repository\",\"homepage\":\"https://github.com\",\"private\":false,\"has_issues\":true,\"has_projects\":true,\"has_wiki\":true}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/user/repos",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "user",
+            "repos"
+          ]
+        },
+        "description": "Generated from cURL: curl -L \\\n  -X POST \\\n  -H \"Accept: application/vnd.github+json\" \\\n  -H \"Authorization: Bearer {{token}}\" \\\n  -H \"X-GitHub-Api-Version: 2026-03-10\" \\\n  {{url}}/users/LikhithPanda/repos \\\n  -d '{\"name\":\"Hello-World\",\"description\":\"This is your first repository\",\"homepage\":\"https://github.com\",\"private\":false,\"has_issues\":true,\"has_projects\":true,\"has_wiki\":true}'"
+      },
+      "response": []
+    },
+    {
+      "name": "get-a-repo",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"200 OK\", () => pm.response.to.have.status(200));\r\npm.test(\"Has admin permission\", () => pm.expect(pm.response.json().permissions.admin).to.be.true);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/vnd.github+json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "X-GitHub-Api-Version",
+            "value": "2026-03-10"
+          }
+        ],
+        "url": {
+          "raw": "{{url}}/repos/{{user}}/{{repo}}",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "repos",
+            "{{user}}",
+            "{{repo}}"
+          ]
+        },
+        "description": "Generated from cURL: curl -L \\\n  -H \"Accept: application/vnd.github+json\" \\\n  -H \"Authorization: Bearer {{token}}\" \\\n  -H \"X-GitHub-Api-Version: 2026-03-10\" \\\n  {{url}}}/repos/{{user}}/{{repo}}"
+      },
+      "response": []
+    },
+    {
+      "name": "upd",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"200 OK\", () => pm.response.to.have.status(200));\r\nif (pm.response.code === 200) {\r\n  pm.test(\"Name unchanged\", () => pm.expect(pm.response.json().name).to.eql(pm.environment.get(\"repo\")));\r\n}"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "setTimeout(() => {}, 5000);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/vnd.github+json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "X-GitHub-Api-Version",
+            "value": "2026-03-10"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"description\": \"Updated by API test\" }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/repos/{{user}}/{{repo}}",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "repos",
+            "{{user}}",
+            "{{repo}}"
+          ]
+        },
+        "description": "Generated from cURL: curl -L \\\n  -X PATCH \\\n  -H \"Accept: application/vnd.github+json\" \\\n  -H \"Authorization: Bearer {{token}}\" \\\n  -H \"X-GitHub-Api-Version: 2026-03-10\" \\\n  {{url}}/repos/{{user}}/{{repo}} \\\n  -d '{\"name\":\"Hello-World\",\"description\":\"This is your first repository\",\"homepage\":\"https://github.com\",\"private\":true,\"has_issues\":true,\"has_projects\":true,\"has_wiki\":true}'"
+      },
+      "response": []
+    },
+    {
+      "name": "del",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"204 No Content\", () => pm.response.to.have.status(204));\r\npm.test(\"Empty body\", () => pm.expect(pm.response.text()).to.eql(\"\"));"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const r = pm.environment.get(\"repo\");\r\nif (!r || r === \"null\" || r === \"undefined\") { throw new Error(\"repo variable is invalid\"); }"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/vnd.github+json"
+          },
+          {
+            "key": "X-GitHub-Api-Version",
+            "value": "2026-03-10"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/repos/{{user}}/{{repo}}",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "repos",
+            "{{user}}",
+            "{{repo}}"
+          ]
+        },
+        "description": "Generated from cURL: curl -L \\\n  -X DELETE \\\n  -H \"Accept: application/vnd.github+json\" \\\n  -H \"Authorization: Bearer {{token}}\" \\\n  -H \"X-GitHub-Api-Version: 2026-03-10\" \\\n  {{url}}/repos/{{user}}/{{repo}}"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "bearer_token_162u",
+      "secret": true
+    },
+    {
+      "key": "bearer_token_031b",
+      "secret": true
+    }
+  ]
+}
